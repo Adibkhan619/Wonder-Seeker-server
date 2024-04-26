@@ -1,16 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 
 // MIDDLEWARE
 app.use(express.json());
 app.use(cors());
-
-// DB_USER = "workadibkhan"
-// DB_PASS = "pQpkWES99ACycY2h"
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.vfffbgl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 // console.log(uri);
@@ -31,13 +28,25 @@ async function run() {
 
     const touristSpotCollection = client.db("touristSpotDB").collection("touristSpot");
 
+   app.get("/touristSpots", async(req, res) => {
+        const cursor = touristSpotCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    }) 
+
+    app.get("/touristSpots/:id" , async(req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id)};
+        const result = await touristSpotCollection.findOne(query);
+        res.send(result);
+    })
+
     app.post("/touristSpots" , async(req, res) => {
         const newSpot = req.body;
         console.log(newSpot);
         const result = await touristSpotCollection.insertOne(newSpot);
         res.send(result);
     })
-
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
