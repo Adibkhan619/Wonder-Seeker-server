@@ -26,14 +26,22 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-        const touristSpotCollection = client
-            .db("touristSpotDB")
+        const touristSpotCollection = client.db("touristSpotDB")
             .collection("touristSpot");
+        const countriesCollection = client.db("countriesDB").collection("countries");
+
+        app.get("/countries", async (req, res) => {   
+            const cursor = countriesCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+            console.log("getting countries");
+        });
 
         app.get("/touristSpots", async (req, res) => {
             const cursor = touristSpotCollection.find();
             const result = await cursor.toArray();
             res.send(result);
+            console.log("getting data");
         });
 
         app.get("/touristSpots/:id", async (req, res) => {
