@@ -41,6 +41,21 @@ async function run() {
         res.send(result);
     })
 
+    // app.post("/myList/" , async(req, res) => {
+    //     const newSpot = req.body;
+    //     console.log(newSpot);
+    //     const result = await touristSpotCollection.insertOne(newSpot);
+    //     res.send(result);
+    // })
+
+    // app.get("/myList/:name", async(req, res) =>{
+    //     const name = req.params.name;
+    //     const query = {displayName: new ObjectId(name)};
+    //     const cursor = touristSpotCollection.find(query);
+    //     const result = await cursor.toArray();
+    //     res.send(result);
+    // })
+
     app.post("/touristSpots" , async(req, res) => {
         const newSpot = req.body;
         console.log(newSpot);
